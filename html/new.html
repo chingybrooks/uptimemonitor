@@ -1,0 +1,175 @@
+{{ define "title" }}Create monitor{{end}}
+
+{{ define "content" }}
+<div class="mx-auto max-w-[1600px] w-full">
+    <div class="md:flex md:items-center md:justify-center p-8 md:p-10">
+        {{template "new_form" . }}
+    </div>
+</div>
+{{ end }}
+
+{{ define "breadcrumbs" }}
+<li class="">
+    <a href="/" hx-boost preload>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="size-4! stroke-current shrink-0">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
+        </svg>
+        Monitors
+    </a>
+</li>
+<li class="">
+    <div class="flex items-center gap-2 ">
+        New
+    </div>
+</li>
+{{ end }}
+
+{{ define "new_form" }}
+<form hx-post="/monitors" hx-swap="outerHTML" class="flex flex-col gap-4 w-full md:max-w-md">
+    <div>
+        <h1 class="font-semibold text-lg">Create monitor</h1>
+        <h5 class="text-sm">
+            The url you provide will be monitored every minute.
+        </h5>
+    </div>
+    <fieldset class="fieldset">
+        <legend class="fieldset-legend">
+            Website URL
+        </legend>
+        <div class="join w-full flex">
+            <div>
+                <select class="select join-item" name="http_method">
+                    <option selected>GET</option>
+                    <option>POST</option>
+                    <option>PATCH</option>
+                    <option>PUT</option>
+                    <option>DELETE</option>
+                </select>
+            </div>
+            <div class="flex-1">
+                <input name="url" id="new_form--url"
+                    class="input join-item {{ with .Form.Errors.Url }} input-error {{ end }} w-full" autofocus required
+                    type="url" placeholder="https://example.com" value="{{ .Form.Url }}" />
+                {{ with .Form.Errors.Url }}
+                <div class="label text-red-500">{{ . }}</div>
+                {{ end }}
+            </div>
+        </div>
+    </fieldset>
+    <div class="card border border-base-200">
+        <div class="card-body p-4">
+            <div class="card-actions justify-start peer">
+                <label class="label">
+                    <input type="checkbox" class="toggle toggle-sm" name="has_custom_headers" {{ if
+                        .Form.HasCustomHeaders }} checked {{ end }} />
+                    Custom Headers
+                </label>
+            </div>
+            <div class="hidden peer-has-checked:block">
+                <textarea class="textarea w-full textarea bg-neutral text-neutral-content" placeholder="{}"
+                    name="http_headers">{{ .Form.HttpHeaders }}</textarea>
+                {{ with .Form.Errors.HttpHeaders }}
+                <div class="label text-red-500">{{ . }}</div>
+                {{ end }}
+            </div>
+        </div>
+    </div>
+    <div class="card border border-base-200">
+        <div class="card-body p-4">
+            <div class="card-actions justify-start peer">
+                <label class="label">
+                    <input type="checkbox" class="toggle toggle-sm" name="has_custom_body" {{ if .Form.HasCustomBody }}
+                        checked {{ end }} />
+                    Custom Body
+                </label>
+            </div>
+            <div class="hidden peer-has-checked:block">
+                <textarea class="textarea w-full textarea bg-neutral text-neutral-content" placeholder="{}"
+                    name="http_body">{{ .Form.HttpBody }}</textarea>
+                {{ with .Form.Errors.HttpBody }}
+                <div class="label text-red-500">{{ . }}</div>
+                {{ end }}
+            </div>
+        </div>
+    </div>
+    <div class="card border border-base-200">
+        <div class="card-body p-4">
+            <div class="card-actions justify-start peer">
+                <label class="label">
+                    <input type="checkbox" class="toggle toggle-sm" name="has_webhook" {{ if .Form.HasWebhook }} checked
+                        {{ end }} />
+                    Webhook
+                    <div class="tooltip">
+                        <div class="tooltip-content tooltip-neutral bg-neutral text-white/90 text-xs">
+                            After each incident the given URL will be notified
+                        </div>
+                        <button class="btn btn-square btn-ghost btn-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="size-5!">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+                            </svg>
+                        </button>
+                    </div>
+                </label>
+            </div>
+            <div class="hidden peer-has-checked:block">
+                <fieldset class="fieldset">
+                    <legend class="fieldset-legend">
+                        Webhook URL
+                    </legend>
+                    <div class="join w-full flex">
+                        <div>
+                            <select class="select join-item" name="webhook_method">
+                                <option>GET</option>
+                                <option selected>POST</option>
+                                <option>PATCH</option>
+                                <option>PUT</option>
+                                <option>DELETE</option>
+                            </select>
+                        </div>
+                        <div class="flex-1">
+                            <input name="webhook_url" id="new_form--webhook_url"
+                                class="input join-item {{ with .Form.Errors.WebhookUrl }} input-error {{ end }} w-full"
+                                type="url" placeholder="https://example.com" value="{{ .Form.WebhookUrl }}" />
+                            {{ with .Form.Errors.WebhookUrl }}
+                            <div class="label text-red-500">{{ . }}</div>
+                            {{ end }}
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <div class="hidden peer-has-checked:block">
+                <fieldset class="fieldset">
+                    <legend class="fieldset-legend">
+                        Webhook Headers
+                    </legend>
+                    <textarea class="textarea w-full textarea bg-neutral text-neutral-content" placeholder="{}"
+                        name="webhook_headers">{{ .Form.WebhookHeaders }}</textarea>
+                    {{ with .Form.Errors.WebhookHeaders }}
+                    <div class="label text-red-500">{{ . }}</div>
+                    {{ end }}
+                </fieldset>
+            </div>
+            <div class="hidden peer-has-checked:block">
+                <fieldset class="fieldset">
+                    <legend class="fieldset-legend">
+                        Webhook Body
+                    </legend>
+                    <textarea class="textarea w-full textarea bg-neutral text-neutral-content" rows="4" placeholder="{}"
+                        name="webhook_body">{{ .Form.WebhookBody }}</textarea>
+                    {{ with .Form.Errors.WebhookBody }}
+                    <div class="label text-red-500">{{ . }}</div>
+                    {{ end }}
+                </fieldset>
+            </div>
+        </div>
+    </div>
+    <div>
+        <button type="submit" class="btn btn-neutral">
+            Submit
+        </button>
+    </div>
+</form>
+{{ end }}

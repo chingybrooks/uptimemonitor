@@ -1,0 +1,76 @@
+{{ define "body" }}
+<div class="flex flex-col gap-2 min-h-screen">
+    {{ template "nav" . }}
+    <main class="flex-1">
+        {{ block "content" . }}{{ end }}
+    </main>
+    {{ template "footer" . }}
+</div>
+{{ end }}
+
+{{ define "nav" }}
+<div class="max-w-[1600px] w-full mx-auto">
+    <div class="flex justify-between gap-8 items-center py-2 p-4 pb-0">
+        <div class="flex-1">
+            <div class="breadcrumbs text-xs">
+                <ul>
+                    {{ block "breadcrumbs" . }}{{ end }}
+                </ul>
+            </div>
+        </div>
+        <div class="shrink-0">
+            <a class="btn btn-neutral" href="/new" hx-boost preload="mouseover">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5!">
+                    <path
+                        d="M2 4.25A2.25 2.25 0 0 1 4.25 2h2.5A2.25 2.25 0 0 1 9 4.25v2.5A2.25 2.25 0 0 1 6.75 9h-2.5A2.25 2.25 0 0 1 2 6.75v-2.5ZM2 13.25A2.25 2.25 0 0 1 4.25 11h2.5A2.25 2.25 0 0 1 9 13.25v2.5A2.25 2.25 0 0 1 6.75 18h-2.5A2.25 2.25 0 0 1 2 15.75v-2.5ZM11 4.25A2.25 2.25 0 0 1 13.25 2h2.5A2.25 2.25 0 0 1 18 4.25v2.5A2.25 2.25 0 0 1 15.75 9h-2.5A2.25 2.25 0 0 1 11 6.75v-2.5ZM15.25 11.75a.75.75 0 0 0-1.5 0v2h-2a.75.75 0 0 0 0 1.5h2v2a.75.75 0 0 0 1.5 0v-2h2a.75.75 0 0 0 0-1.5h-2v-2Z" />
+                </svg>
+
+                <span class="">
+                    Create
+                </span>
+            </a>
+        </div>
+    </div>
+</div>
+{{ end }}
+
+{{ define "footer" }}
+<div class="max-w-[1600px] mx-auto w-full p-4 pt-10">
+    <footer class="text-sm text-base-content p-4 flex flex-col md:flex-row gap-12 md:gap-4">
+        <nav class="flex flex-col gap-2 flex-1">
+            <h6 class="footer-title truncate">{{ .User.Name }}</h6>
+            <a class="link link-hover">Account settings</a>
+            <a class="link link-hover">Manage users</a>
+            <a class="link link-hover" href="/logout">Log out</a>
+        </nav>
+        <nav class="flex flex-col gap-2 flex-1">
+            <h6 class="footer-title">UPTIMEMONITOR</h6>
+            <a class="link link-hover">Documentation</a>
+            <a class="link link-hover">Pricing</a>
+            <a class="link link-hover">Terms of use</a>
+        </nav>
+        <nav class="flex flex-col gap-2 flex-1">
+            <h6 class="footer-title">AIR Labs</h6>
+            <a class="link link-hover">About us</a>
+            <a class="link link-hover">Other products</a>
+            <a class="link link-hover flex items-center gap-1" href="https://x.com/airlabspl" target="_blank">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" version="1.1" class="size-[11px]!">
+                    <path
+                        d="M178.57 127.15 290.27 0h-26.46l-97.03 110.38L89.34 0H0l117.13 166.93L0 300.25h26.46l102.4-116.59 81.8 116.59h89.34M36.01 19.54H76.66l187.13 262.13h-40.66" />
+                </svg>
+                <div>Account</div>
+            </a>
+        </nav>
+    </footer>
+    <footer class="footer text-base-content p-4">
+        <aside class="flex flex-col gap-3">
+            <div>
+                {{ template "logo" . }}
+            </div>
+            <div>
+                © 2025 AIR Labs
+            </div>
+        </aside>
+    </footer>
+</div>
+{{ end }}

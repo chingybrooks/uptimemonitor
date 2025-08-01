@@ -1,0 +1,181 @@
+{{ define "title" }}Edit monitor{{end}}
+
+{{ define "content" }}
+<div class="mx-auto max-w-[1600px] w-full">
+    <div class="md:flex md:items-center md:justify-center p-8 md:p-10">
+        {{template "edit_form" . }}
+    </div>
+</div>
+{{ end }}
+
+{{ define "edit_form" }}
+<form hx-patch="/monitors/{{ .Monitor.ID }}" hx-swap="outerHTML" class="flex flex-col gap-4 w-full md:max-w-md">
+    <div>
+        <h1 class="font-semibold text-lg">Edit monitor</h1>
+    </div>
+    <fieldset class="fieldset">
+        <div class="join w-full flex">
+            <div>
+                <select class="select join-item" name="http_method">
+                    <option {{ if eq .Form.HttpMethod "GET" }}selected{{ end }}>GET</option>
+                    <option {{ if eq .Form.HttpMethod "POST" }}selected{{ end }}>POST</option>
+                    <option {{ if eq .Form.HttpMethod "PATCH" }}selected{{ end }}>PATCH</option>
+                    <option {{ if eq .Form.HttpMethod "PUT" }}selected{{ end }}>PUT</option>
+                    <option {{ if eq .Form.HttpMethod "DELETE" }}selected{{ end }}>DELETE</option>
+                </select>
+            </div>
+            <div class="flex-1 ">
+                <input name="url" id="edit_form--url"
+                    class="input join-item {{ with .Form.Errors.Url }} input-error {{ end }} w-full" required type="url"
+                    placeholder="https://example.com" value="{{ .Form.Url }}" />
+                {{ with .Form.Errors.Url }}
+                <div class="label text-red-500">{{ . }}</div>
+                {{ end }}
+            </div>
+        </div>
+    </fieldset>
+    <div class="card border border-base-200">
+        <div class="card-body p-4">
+            <div class="card-actions justify-start peer">
+                <label class="label">
+                    <input type="checkbox" class="toggle toggle-sm" name="has_custom_headers" {{ if
+                        .Form.HasCustomHeaders }} checked {{ end }} />
+                    Custom Headers
+                </label>
+            </div>
+            <div class="hidden peer-has-checked:block">
+                <textarea class="textarea bg-neutral text-neutral-content w-full textarea" placeholder="{}"
+                    name="http_headers">{{ .Form.HttpHeaders }}</textarea>
+                {{ with .Form.Errors.HttpHeaders }}
+                <div class="label text-red-500">{{ . }}</div>
+                {{ end }}
+            </div>
+        </div>
+    </div>
+    <div class="card border border-base-200">
+        <div class="card-body p-4">
+            <div class="card-actions justify-start peer">
+                <label class="label">
+                    <input type="checkbox" class="toggle toggle-sm" name="has_custom_body" {{ if .Form.HasCustomBody }}
+                        checked {{ end }} />
+                    Custom Body
+                </label>
+            </div>
+            <div class="hidden peer-has-checked:block">
+                <textarea class="textarea bg-neutral text-neutral-content w-full textarea" placeholder="{}"
+                    name="http_body">{{ .Form.HttpBody }}</textarea>
+                {{ with .Form.Errors.HttpBody }}
+                <div class="label text-red-500">{{ . }}</div>
+                {{ end }}
+            </div>
+        </div>
+    </div>
+    <div class="card border border-base-200">
+        <div class="card-body p-4">
+            <div class="card-actions justify-start peer">
+                <label class="label">
+                    <input type="checkbox" class="toggle toggle-sm" name="has_webhook" {{ if .Form.HasWebhook }} checked
+                        {{ end }} />
+                    Webhook
+                    <div class="tooltip">
+                        <div class="tooltip-content tooltip-neutral bg-neutral text-white/90 text-xs">
+                            After each incident the given URL will be notified
+                        </div>
+                        <button class="btn btn-square btn-ghost btn-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="size-5!">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+                            </svg>
+                        </button>
+                    </div>
+                </label>
+            </div>
+            <div class="hidden peer-has-checked:block">
+                <fieldset class="fieldset">
+                    <legend class="fieldset-legend">
+                        Webhook URL
+                    </legend>
+                    <div class="join w-full flex">
+                        <div>
+                            <select class="select join-item" name="webhook_method">
+                                <option {{ if eq .Form.WebhookMethod "GET" }}selected{{ end }}>GET</option>
+                                <option {{ if eq .Form.WebhookMethod "POST" }}selected{{ end }}>POST</option>
+                                <option {{ if eq .Form.WebhookMethod "PATCH" }}selected{{ end }}>PATCH</option>
+                                <option {{ if eq .Form.WebhookMethod "PUT" }}selected{{ end }}>PUT</option>
+                                <option {{ if eq .Form.WebhookMethod "DELETE" }}selected{{ end }}>DELETE</option>
+                            </select>
+                        </div>
+                        <div class="flex-1">
+                            <input name="webhook_url" id="new_form--webhook_url"
+                                class="input join-item {{ with .Form.Errors.WebhookUrl }} input-error {{ end }} w-full"
+                                type="url" placeholder="https://example.com" value="{{ .Form.WebhookUrl }}" />
+                            {{ with .Form.Errors.WebhookUrl }}
+                            <div class="label text-red-500">{{ . }}</div>
+                            {{ end }}
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <div class="hidden peer-has-checked:block">
+                <fieldset class="fieldset">
+                    <legend class="fieldset-legend">
+                        Webhook Headers
+                    </legend>
+                    <textarea class="textarea w-full textarea bg-neutral text-neutral-content" placeholder="{}"
+                        name="webhook_headers">{{ .Form.WebhookHeaders }}</textarea>
+                    {{ with .Form.Errors.WebhookHeaders }}
+                    <div class="label text-red-500">{{ . }}</div>
+                    {{ end }}
+                </fieldset>
+            </div>
+            <div class="hidden peer-has-checked:block">
+                <fieldset class="fieldset">
+                    <legend class="fieldset-legend">
+                        Webhook Body
+                    </legend>
+                    <textarea class="textarea w-full textarea bg-neutral text-neutral-content" placeholder="{}"
+                        name="webhook_body">{{ .Form.WebhookBody }}</textarea>
+                    {{ with .Form.Errors.WebhookBody }}
+                    <div class="label text-red-500">{{ . }}</div>
+                    {{ end }}
+                </fieldset>
+            </div>
+        </div>
+    </div>
+    <div>
+        <button type="submit" class="btn btn-neutral">
+            Submit
+        </button>
+    </div>
+</form>
+{{ end }}
+
+{{ define "breadcrumbs" }}
+<li class="">
+    <a href="/" hx-boost preload>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="size-4! stroke-current shrink-0">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
+        </svg>
+        Monitors
+    </a>
+</li>
+<li class="">
+    <a href="/m/{{ .Monitor.Uuid }}" hx-boost preload>
+        <div class="flex items-center gap-2 ">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="size-4! stroke-current shrink-0">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25m18 0A2.25 2.25 0 0 0 18.75 3H5.25A2.25 2.25 0 0 0 3 5.25m18 0V12a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 12V5.25" />
+            </svg>
+            <span class="truncate">{{ .Monitor.Host }}</span>
+        </div>
+    </a>
+</li>
+<li class="">
+    <div class="flex items-center gap-2 ">
+        Edit
+    </div>
+</li>
+{{ end }}

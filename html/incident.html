@@ -1,0 +1,184 @@
+{{ define "incident_list" }}
+<ul class="list card card-border {{ if .Incidents }} bg-neutral text-neutral-content {{ end }} bg-base-100 w-full w-full rounded-box lg:max-w-sm"
+    hx-get="/incidents" hx-trigger="every 60s" hx-swap="outerHTML">
+    {{ if .Incidents }}
+    <li class="p-4 pb-2 tracking-wide font-semibold">
+        🚨 Open Incidents
+    </li>
+
+    {{ range .Incidents }}
+    <a href="/m/{{ .Monitor.Uuid }}/i/{{ .Uuid}}" hx-boost preload>
+        <li class="list-row w-full max-w-full block" id="incidents-{{ .ID }}">
+            <div class="flex flex-col gap-1.5">
+                <div class="flex gap-2 justify-between items-center">
+                    <div aria-label="error" class="status status-error animate-ping shrink-0"></div>
+                    <div class="text-xs font-semibold truncate flex-1 shrink-0">
+                        <div class="flex items-base gap-1 w-full max-w-full">
+                            <span class="flex-none truncate"> {{ .Monitor.Domain }}</span>
+                            <span class="flex-grow leader-dots hidden lg:block"></span>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="flex gap-2 justify-between items-center">
+                    <div class="max-w-full overflow-hidden text-xs opacity-80 text-right">
+                        {{ .CreatedAt.Format "2006-01-02 15:04" }}
+                    </div>
+                    <div class="text-xs">
+                        <div class="badge badge-soft truncate max-w-full inline-block text-xs py-1 {{ .BadgeClass }}">
+                            {{ .StatusCode }}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </li>
+    </a>
+    {{ end }}
+    {{ else }}
+    <li class="p-4 pb-0 tracking-wide font-semibold">
+        Open Incidents
+    </li>
+    <li class="p-4 tracking-wide opacity-60 text-xs">
+        No incidents to report.
+    </li>
+    {{ end }}
+</ul>
+{{ end }}
+
+{{ define "title" }}
+{{ .Incident.StatusCode }} {{ .Incident.StatusCodeText }} ({{ .Incident.CreatedAt.Format "2006-01-02 15:04"}})
+{{ end }}
+
+{{ define "content" }}
+<div class="max-w-[1600px] mx-auto px-4">
+    <div class="flex justify-between gap-4 flex-col lg:flex-row">
+        {{ with .Incident }}
+        <div class="flex-1 flex flex-col gap-4">
+            <div class="card card-border p-4 flex flex-col gap-4">
+                <div class="flex flex-col md:flex-row gap-1.5 md:gap-4 md:items-start justify-between text-sm">
+                    <div>
+                        <div
+                            class="badge badge-soft truncate max-w-full inline-block text-xs py-1 {{ .StatusBadgeClass }}">
+                            {{ .StatusBadgeText }}
+                        </div>
+                    </div>
+                    <div class="flex-1 flex flex-col gap-1">
+                        <div>
+                            {{ .StatusCode }} {{ .StatusCodeText }}
+                        </div>
+                        <div class="w-auto max-w-[350px] text-xs leading-[1.2rem] opacity-80">
+                            {{ .CreatedAt.Format "2006-01-02 15:04" }}
+                            {{ if .ResolvedAt }}
+                            (resolved at {{ .ResolvedAt.Format "2006-01-02 15:04" }})
+                            {{ end }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-4">
+                <h2 class="font-semibold">Request</h2>
+            </div>
+
+            <div class="mockup-code w-full">
+                <div class="p-4 max-h-[600px] overflow-y-scroll overflow-x-scroll flex flex-col gap-1">
+                    {{ if and $.Incident.ReqMethod $.Incident.ReqUrl }}
+                    <pre>curl -X{{ $.Incident.ReqMethod }} {{ $.Incident.ReqUrl }} \</pre>
+                    {{ end}}
+                    {{ if $.Incident.ReqHeaders }}
+                    {{ range $key, $value := $.Incident.ReqHeadersMap }}
+                    <pre class="opacity-60 pl-4">-H '{{ $key }}: {{ $value }}' \</pre>
+                    {{ end }}
+                    {{ end}}
+                    {{ if $.Incident.ReqBody }}
+                    <pre class="pl-4">-d '{{ $.Incident.ReqBody }}'</pre>
+                    {{ end}}
+                </div>
+            </div>
+
+            <div class="px-4">
+                <h2 class="font-semibold">Response</h2>
+            </div>
+
+            <div class="mockup-browser border border-base-200 w-full bg-base-100 text-neutral-800 text-sm">
+                <div class="mockup-browser-toolbar">
+                    <div class="input">{{ $.Monitor.HttpMethod }} {{ $.Monitor.Url }}</div>
+                </div>
+                <div class="p-4 max-h-[600px] overflow-y-scroll overflow-x-scroll flex flex-col gap-2">
+                    {{ if $.Incident.Headers }}
+                    <pre class="opacity-60">{{ $.Incident.Headers }}</pre>
+                    {{ end}}
+                    {{ if $.Incident.Body }}
+                    <pre>{{ $.Incident.Body }}</pre>
+                    {{ else }}
+                    <pre>//</pre>
+                    {{ end}}
+                </div>
+            </div>
+
+        </div>
+        {{ end }}
+
+        <div class="lg:w-[237px] flex flex-col gap-4">
+            <ul class="list bg-base-100 rounded-box border border-base-200 p-2 text-left">
+                <form class="block list-row justify-stretch px-0 py-0" hx-delete="/incidents/{{ .Incident.ID }}"
+                    hx-confirm="Are you sure?" hx-swap="none">
+                    <button type="submit">
+                        <div class="list-col-grow">
+                            <button class="btn btn-ghost w-full text-left align-start justify-start text-error">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" class="size-5!">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                </svg>
+
+                                Remove incident
+                            </button>
+                        </div>
+                    </button>
+                </form>
+            </ul>
+        </div>
+
+
+
+    </div>
+</div>
+{{end}}
+
+{{ define "breadcrumbs" }}
+<li class="">
+    <a href="/" hx-boost preload>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="size-4! stroke-current shrink-0">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
+        </svg>
+        Monitors
+    </a>
+</li>
+<li class="">
+    <a href="/m/{{ .Monitor.Uuid }}" hx-boost preload>
+        <div class="flex items-center gap-2 hidden lg:flex">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="size-4! stroke-current shrink-0">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25m18 0A2.25 2.25 0 0 0 18.75 3H5.25A2.25 2.25 0 0 0 3 5.25m18 0V12a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 12V5.25" />
+            </svg>
+            <span class="truncate">{{ .Monitor.Host }}</span>
+        </div>
+        <span class="lg:hidden opacity-40">...</span>
+    </a>
+</li>
+<li class="">
+    <div class="flex items-center gap-2 ">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+            class="size-4! stroke-current shrink-0">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
+        </svg>
+
+        <span class="truncate">{{ .Incident.StatusCode }} {{ .Incident.StatusCodeText }}</span>
+    </div>
+</li>
+{{ end }}

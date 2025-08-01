@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>{{ block "title" .}}{{ end }} - Uptime Monitor</title>
+    <link rel="stylesheet" href="/static/css/daisyui.css?v=5.0.46" />
+    <link rel="stylesheet" href="/static/css/themes.css?v=5.0.46" />
+    <link rel="stylesheet" href="/static/css/main.css?v=1" />
+    {{ block "head" .}}{{ end }}
+</head>
+
+<body hx-ext="preload" data-theme="emerald" class="min-h-screen font-mono">
+    {{ block "body" . }}{{ end }}
+
+    <script defer src="/static/js/tailwind.min.js?v=5.0.46"></script>
+    <script defer src="/static/js/htmx.min.js?v=2.0.6"></script>
+    <script defer src="/static/js/htmx-ext-preload.min.js?v=2.1.0"></script>
+    <script defer src="/static/js/main.js?v=1"></script>
+</body>
+
+</html>
+
+{{ define "logo"}}
+<a href="/" hx-boost preload="mouseover" class="flex items-center gap-1.5 text-sm font-medium">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+        class="size-5!">
+        <path stroke-linecap="round" stroke-linejoin="round"
+            d="M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941" />
+    </svg>
+
+    <span class="">
+        UM {{ template "version" . }}
+    </span>
+</a>
+{{ end }}
+
+{{ define "version" }}
+<span class="text-neutral-400 text-xs font-normal truncate">v0.5.0-alpha</span>
+{{ end }}
+
+{{ define "sponsors" }}
+<div hx-get="/sponsors" hx-trigger="intersect" hx-swap="outerHTML"></div>
+{{ end }}
