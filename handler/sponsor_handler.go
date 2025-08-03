@@ -3,7 +3,6 @@ package handler
 import (
 	"encoding/json"
 	"html/template"
-	"log"
 	"net/http"
 	"slices"
 	"time"
@@ -33,7 +32,6 @@ func init() {
 }
 
 func reloadSponsors() {
-	log.Printf("RELOADING SPONSORS")
 	req, err := http.NewRequest(http.MethodGet, "https://sponsors.uptimemonitor.dev", nil)
 	if err != nil {
 		return
