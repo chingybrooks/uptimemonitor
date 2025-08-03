@@ -5,9 +5,7 @@
 # port: 3000
 services:
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: airlabs/uptimemonitor:master
     environment:
       - SECURE=${SECURE}
     ports:
