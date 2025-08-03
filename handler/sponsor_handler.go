@@ -14,7 +14,7 @@ import (
 var initialSponsors = []uptimemonitor.Sponsor{
 	{
 		Name:  "AIR Labs",
-		Url:   "https://airlabs.pl",
+		Url:   "https://github.com/airlabs",
 		Image: "/static/img/airlabs.png",
 	},
 	{
