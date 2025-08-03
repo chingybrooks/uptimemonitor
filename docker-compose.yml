@@ -9,7 +9,7 @@ services:
       context: .
       dockerfile: Dockerfile
     environment:
-      - SECURE=false
+      - SECURE=${SECURE}
     ports:
       - "3000:3000"
     restart: always

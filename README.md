@@ -36,6 +36,12 @@ chmod +x uptimemonitor
 You can also use provided `Dockerfile` and `docker-compose.yml` for reference to
 run the app using Docker.
 
+For example, to run a local copy without https enabled:
+
+```bash
+SECURE=false COOLIFY_VOLUME_APP=~/testdata docker-compose up
+```
+
 ## First run
 
 When you first run the application you will be asked to create a new account,
