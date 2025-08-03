@@ -23,11 +23,15 @@ var (
 )
 
 func main() {
-	flag.StringVar(&dsn, "dsn", "uptimemonitor.sqlite?_journal_mode=WAL&_busy_timeout=5000&_synchronous=FULL&_txlock=immediate", "database server name")
+	flag.StringVar(&dsn, "dsn", "data/uptimemonitor.sqlite?_journal_mode=WAL&_busy_timeout=5000&_synchronous=FULL&_txlock=immediate", "database server name")
 	flag.StringVar(&addr, "addr", ":3000", "server address")
 	flag.BoolVar(&secure, "secure", true, "use https")
 
 	flag.Parse()
+
+	if os.Getenv("SECURE") == "false" {
+		secure = false
+	}
 
 	store := store.New(dsn)
 	service := service.New(store)

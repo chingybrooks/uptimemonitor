@@ -33,6 +33,9 @@ chmod +x uptimemonitor
 ./uptimemonitor -addr=":3000"
 ```
 
+You can also use provided `Dockerfile` and `docker-compose.yml` for reference to
+run the app using Docker.
+
 ## First run
 
 When you first run the application you will be asked to create a new account,
@@ -85,3 +88,13 @@ small donation- please use Github Sponsors.
 
 The donations of $50 a month and above will be featured in a sponsors area
 inside the application dashboard.
+
+## Roadmap
+
+- Monitor status badges
+- Change password
+- Manage users
+- Timezones
+- Reset password via cli
+- Add "Test Webhook" button with fake incident
+- Sort monitors option (with localstorage sync) by created_at/name(domain)
