@@ -1,12 +1,19 @@
 package handler
 
 import (
-	"encoding/json"
 	"html/template"
 	"net/http"
 	"uptimemonitor"
 	"uptimemonitor/html"
 )
+
+var sponsors = []uptimemonitor.Sponsor{
+	{
+		Name:  "AIR Labs",
+		Url:   "https://airlabs.pl",
+		Image: "/static/img/airlabs.svg",
+	},
+}
 
 func (*Handler) ListSponsors() http.HandlerFunc {
 	layout := template.Must(template.ParseFS(html.FS, "layout.html"))
@@ -23,36 +30,9 @@ func (*Handler) ListSponsors() http.HandlerFunc {
 		}
 
 		d := data{
-			Sponsors: []uptimemonitor.Sponsor{
-				{
-					Name:  "AIR Labs",
-					Url:   "https://airlabs.pl",
-					Image: "/static/img/airlabs.svg",
-				},
-			},
-		}
-
-		req, err := http.NewRequest(http.MethodGet, "https://sponsors.uptimemonitor.dev", nil)
-		if err != nil {
-			sponsor.Execute(w, d)
-			return
-		}
-
-		res, err := http.DefaultClient.Do(req)
-		if err != nil {
-			sponsor.Execute(w, d)
-			return
-		}
-
-		var sponsors []uptimemonitor.Sponsor
-		err = json.NewDecoder(res.Body).Decode(&sponsors)
-		if err != nil {
-			sponsor.Execute(w, d)
-			return
-		}
-
-		sponsor.Execute(w, data{
 			Sponsors: sponsors,
-		})
+		}
+
+		sponsor.Execute(w, d)
 	}
 }
