@@ -10,7 +10,7 @@ watch:
 
 .PHONY: build
 build:
-	go build -o ./tmp/main ./cmd/uptimemonitor
+	go build -o ./tmp/main -ldflags "-X uptimemonitor/pkg/version.Version=dev" ./cmd/uptimemonitor
 
 .PHONY: test
 test:
