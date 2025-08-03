@@ -7,7 +7,7 @@ services:
   app:
     image: airlabs/uptimemonitor:latest
     environment:
-      - SECURE=${SECURE}
+      - SECURE=${SECURE:-true}
     ports:
       - "3000:3000"
     restart: always

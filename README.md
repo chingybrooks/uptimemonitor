@@ -104,3 +104,9 @@ inside the application dashboard.
 - Reset password via cli
 - Add "Test Webhook" button with fake incident
 - Sort monitors option (with localstorage sync) by created_at/name(domain)
+
+---
+
+<div style="text-align: center; margin: 50px auto;">
+<img src="static/img/logo.svg" style="height: 32px; width: auto">
+</div>
