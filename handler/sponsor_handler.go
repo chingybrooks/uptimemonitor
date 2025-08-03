@@ -8,6 +8,7 @@ import (
 	"time"
 	"uptimemonitor"
 	"uptimemonitor/html"
+	"uptimemonitor/pkg/version"
 )
 
 var initialSponsors = []uptimemonitor.Sponsor{
@@ -61,7 +62,11 @@ func (*Handler) ListSponsors() http.HandlerFunc {
 
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Header.Get("HX-Request") != "true" {
-			layout.ExecuteTemplate(w, "sponsors", nil)
+			layout.ExecuteTemplate(w, "sponsors", struct {
+				Version string
+			}{
+				Version: version.Version,
+			})
 			return
 		}
 

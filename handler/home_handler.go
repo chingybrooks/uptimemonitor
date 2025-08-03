@@ -5,13 +5,15 @@ import (
 	"net/http"
 	"uptimemonitor"
 	"uptimemonitor/html"
+	"uptimemonitor/pkg/version"
 )
 
 func (h *Handler) HomePage() http.HandlerFunc {
 	tmpl := template.Must(template.ParseFS(html.FS, "layout.html", "app.html", "home.html"))
 
 	type data struct {
-		User uptimemonitor.User
+		Version string
+		User    uptimemonitor.User
 	}
 
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -22,7 +24,8 @@ func (h *Handler) HomePage() http.HandlerFunc {
 		}
 
 		tmpl.Execute(w, data{
-			User: getUserFromRequest(r),
+			Version: version.Version,
+			User:    getUserFromRequest(r),
 		})
 	}
 }

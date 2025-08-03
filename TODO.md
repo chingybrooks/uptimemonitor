@@ -2,11 +2,11 @@
 
 What's left to do:
 
-- [ ] Add sponsors badges (sponsors.uptimemonitor.dev api)
+- [ ] Get app version from git tag
 - [ ] Add documentation
 - [ ] Document how to install
 - [ ] Document webhook parsing and available variables
-- [ ] Get app version from git tag
+- [ ] Release 🎉
 
 Optional:
 

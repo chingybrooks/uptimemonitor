@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"uptimemonitor"
 	"uptimemonitor/html"
+	"uptimemonitor/pkg/version"
 )
 
 func (h *Handler) ListIncidents() http.HandlerFunc {
@@ -53,6 +54,7 @@ func (h *Handler) IncidentPage() http.HandlerFunc {
 	tmpl := template.Must(template.ParseFS(html.FS, "layout.html", "app.html", "incident.html"))
 
 	type data struct {
+		Version  string
 		User     uptimemonitor.User
 		Incident uptimemonitor.Incident
 		Monitor  uptimemonitor.Monitor
@@ -72,6 +74,7 @@ func (h *Handler) IncidentPage() http.HandlerFunc {
 		}
 
 		tmpl.Execute(w, data{
+			Version:  version.Version,
 			User:     getUserFromRequest(r),
 			Incident: incident,
 			Monitor:  incident.Monitor,

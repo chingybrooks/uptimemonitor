@@ -31,13 +31,13 @@
     </svg>
 
     <span class="">
-        UM {{ template "version" . }}
+        UM
+
+        {{ with .Version }}
+        <span class="text-neutral-400 text-xs font-normal truncate">{{ . }}</span>
+        {{ end }}
     </span>
 </a>
-{{ end }}
-
-{{ define "version" }}
-<span class="text-neutral-400 text-xs font-normal truncate">v0.5.0-alpha</span>
 {{ end }}
 
 {{ define "sponsors" }}

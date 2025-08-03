@@ -7,13 +7,15 @@ import (
 	"uptimemonitor"
 	"uptimemonitor/form"
 	"uptimemonitor/html"
+	"uptimemonitor/pkg/version"
 
 	"golang.org/x/crypto/bcrypt"
 )
 
 func (h *Handler) SetupPage() http.HandlerFunc {
 	type data struct {
-		Form form.SetupForm
+		Version string
+		Form    form.SetupForm
 	}
 
 	tmpl := template.Must(template.ParseFS(html.FS, "layout.html", "setup.html"))
@@ -31,7 +33,8 @@ func (h *Handler) SetupPage() http.HandlerFunc {
 		}
 
 		tmpl.Execute(w, data{
-			Form: form.SetupForm{},
+			Version: version.Version,
+			Form:    form.SetupForm{},
 		})
 	}
 }

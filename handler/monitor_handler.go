@@ -8,6 +8,7 @@ import (
 	"uptimemonitor"
 	"uptimemonitor/form"
 	"uptimemonitor/html"
+	"uptimemonitor/pkg/version"
 )
 
 func (h *Handler) ListMonitors() http.HandlerFunc {
@@ -36,12 +37,14 @@ func (h *Handler) CreateMonitorPage() http.HandlerFunc {
 	tmpl := template.Must(template.ParseFS(html.FS, "layout.html", "app.html", "new.html"))
 
 	type data struct {
-		Form form.MonitorForm
-		User uptimemonitor.User
+		Version string
+		Form    form.MonitorForm
+		User    uptimemonitor.User
 	}
 
 	return func(w http.ResponseWriter, r *http.Request) {
 		tmpl.Execute(w, data{
+			Version: version.Version,
 			Form: form.MonitorForm{
 				HttpHeaders: `{
 	"Content-Type": "application/json"
@@ -124,6 +127,7 @@ func (h *Handler) MonitorPage() http.HandlerFunc {
 	tmpl := template.Must(template.ParseFS(html.FS, "layout.html", "app.html", "monitor.html"))
 
 	type data struct {
+		Version   string
 		Monitor   uptimemonitor.Monitor
 		Skeletons []int
 		User      uptimemonitor.User
@@ -137,6 +141,7 @@ func (h *Handler) MonitorPage() http.HandlerFunc {
 		}
 
 		tmpl.Execute(w, data{
+			Version:   version.Version,
 			Monitor:   m,
 			Skeletons: make([]int, 60),
 			User:      getUserFromRequest(r),
@@ -220,6 +225,7 @@ func (h *Handler) EditMonitorPage() http.HandlerFunc {
 	tmpl := template.Must(template.ParseFS(html.FS, "layout.html", "app.html", "edit.html"))
 
 	type data struct {
+		Version string
 		Form    form.MonitorForm
 		User    uptimemonitor.User
 		Monitor uptimemonitor.Monitor
@@ -255,6 +261,7 @@ func (h *Handler) EditMonitorPage() http.HandlerFunc {
 		}
 
 		tmpl.Execute(w, data{
+			Version: version.Version,
 			Monitor: m,
 			Form:    f,
 			User:    getUserFromRequest(r),
@@ -362,6 +369,7 @@ func (h *Handler) DeleteMonitorPage() http.HandlerFunc {
 	tmpl := template.Must(template.ParseFS(html.FS, "layout.html", "app.html", "delete.html"))
 
 	type data struct {
+		Version string
 		User    uptimemonitor.User
 		Monitor uptimemonitor.Monitor
 	}
@@ -375,6 +383,7 @@ func (h *Handler) DeleteMonitorPage() http.HandlerFunc {
 		}
 
 		tmpl.Execute(w, data{
+			Version: version.Version,
 			User:    getUserFromRequest(r),
 			Monitor: m,
 		})

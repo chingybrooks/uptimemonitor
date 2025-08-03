@@ -7,20 +7,23 @@ import (
 	"uptimemonitor"
 	"uptimemonitor/form"
 	"uptimemonitor/html"
+	"uptimemonitor/pkg/version"
 
 	"golang.org/x/crypto/bcrypt"
 )
 
 func (h *Handler) LoginPage() http.HandlerFunc {
 	type data struct {
-		Form form.LoginForm
+		Version string
+		Form    form.LoginForm
 	}
 
 	tmpl := template.Must(template.ParseFS(html.FS, "layout.html", "login.html"))
 
 	return func(w http.ResponseWriter, r *http.Request) {
 		tmpl.Execute(w, data{
-			Form: form.LoginForm{},
+			Version: version.Version,
+			Form:    form.LoginForm{},
 		})
 	}
 }
