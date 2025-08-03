@@ -1,6 +1,8 @@
 name: Docker
 
-on: push
+on:
+  release:
+    types: [published]
 
 jobs:
   push_to_registry:
