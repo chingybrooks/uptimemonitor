@@ -15,7 +15,7 @@ var initialSponsors = []uptimemonitor.Sponsor{
 	{
 		Name:  "AIR Labs",
 		Url:   "https://airlabs.pl",
-		Image: "/static/img/airlabs.svg",
+		Image: "/static/img/airlabs.png",
 	},
 }
 var sponsors = []uptimemonitor.Sponsor{}

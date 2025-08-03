@@ -5,8 +5,10 @@
     <div class="flex lg:flex-col gap-6 overflow-x-auto">
         {{ range .Sponsors }}
         <a href="{{ .Url }}" target="_blank" rel="noopener noreferrer">
-            <div class="text-center flex flex-col shrink-0">
-                <img src="{{ .Image }}" alt="{{ .Name }}" class="max-h-[30px] w-auto" />
+            <div class="text-center flex flex-col items-center shrink-0">
+                <div>
+                    <img src="{{ .Image }}" alt="{{ .Name }}" class="max-h-[30px] w-auto" />
+                </div>
                 <div class="text-sm truncate">{{ .Name }}</div>
             </div>
         </a>
