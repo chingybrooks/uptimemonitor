@@ -17,6 +17,11 @@ var initialSponsors = []uptimemonitor.Sponsor{
 		Url:   "https://airlabs.pl",
 		Image: "/static/img/airlabs.png",
 	},
+	{
+		Name:  "ERPSPACE",
+		Url:   "https://erpspace.io",
+		Image: "https://erpspace.io/wp-content/uploads/2020/11/cropped-LogoErp_m-2.png",
+	},
 }
 var sponsors = []uptimemonitor.Sponsor{}
 
