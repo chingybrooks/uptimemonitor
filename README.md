@@ -23,7 +23,7 @@ Yes, but with following constraints:
    [Releases page](https://github.com/airlabspl/uptimemonitor/releases)):
 
 ```bash
-wget https://github.com/airlabspl/uptimemonitor/releases/download/v0.0.2-alpha/uptimemonitor
+wget https://github.com/airlabspl/uptimemonitor/releases/download/v1.1.1/uptimemonitor
 chmod +x uptimemonitor
 ```
 
