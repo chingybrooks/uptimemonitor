@@ -21,4 +21,4 @@ COPY --from=builder /app/uptimemonitor .
 
 EXPOSE 3000
 
-CMD ["./uptimemonitor"]
+CMD ["./uptimemonitor","-addr=:$PORT"]
