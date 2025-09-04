@@ -85,6 +85,7 @@ func (h *Handler) CreateMonitorForm() http.HandlerFunc {
 			WebhookUrl:       r.PostFormValue("webhook_url"),
 			WebhookHeaders:   r.PostFormValue("webhook_headers"),
 			WebhookBody:      r.PostFormValue("webhook_body"),
+			Group:            r.PostFormValue("group"),
 		}
 
 		if !f.Validate() {
