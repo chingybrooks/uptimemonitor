@@ -41,31 +41,6 @@
             <h6 class="footer-title truncate">{{ .User.Name }}</h6>
             <a class="link link-hover" href="/logout">Log out</a>
         </nav>
-        <nav class="flex flex-col gap-2 flex-1">
-            <h6 class="footer-title">UPTIMEMONITOR</h6>
-            <a class="link link-hover" href="https://github.com/airlabspl/uptimemonitor/blob/master/README.md"
-                target="_blank" rel="noopener noreferrer">Documentation</a>
-        </nav>
-        <nav class="flex flex-col gap-2 flex-1">
-            <h6 class="footer-title">AIR Labs</h6>
-            <a class="link link-hover flex items-center gap-1" href="https://x.com/airlabspl" target="_blank">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" version="1.1" class="size-[11px]!">
-                    <path
-                        d="M178.57 127.15 290.27 0h-26.46l-97.03 110.38L89.34 0H0l117.13 166.93L0 300.25h26.46l102.4-116.59 81.8 116.59h89.34M36.01 19.54H76.66l187.13 262.13h-40.66" />
-                </svg>
-                <div>Account</div>
-            </a>
-        </nav>
-    </footer>
-    <footer class="footer text-base-content p-4">
-        <aside class="flex flex-col gap-3">
-            <div>
-                {{ template "logo" . }}
-            </div>
-            <div>
-                © 2025 AIR Labs
-            </div>
-        </aside>
     </footer>
 </div>
 {{ end }}
