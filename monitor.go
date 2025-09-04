@@ -8,22 +8,25 @@ import (
 )
 
 type Monitor struct {
-	ID                int64
-	Uuid              string
-	Url               string
-	HttpMethod        string
-	HttpHeaders       string
-	HttpBody          string
-	WebhookUrl        string
-	WebhookMethod     string
-	WebhookHeaders    string
-	WebhookBody       string
-	Uptime            float32
-	AvgResponseTimeMs int64
-	N                 int64
-	IncidentsCount    int64
-	CreatedAt         time.Time
+    ID                int64
+    Uuid              string
+    Url               string
+    HttpMethod        string
+    HttpHeaders       string
+    HttpBody          string
+    WebhookUrl        string
+    WebhookMethod     string
+    WebhookHeaders    string
+    WebhookBody       string
+    Uptime            float32
+    AvgResponseTimeMs int64
+    N                 int64
+    IncidentsCount    int64
+    CreatedAt         time.Time
+
+    Group             string    // добавляем для группировки
 }
+
 
 func (m Monitor) URI() string {
 	return fmt.Sprintf("/m/%s", m.Uuid)
