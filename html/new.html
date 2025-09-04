@@ -57,6 +57,24 @@
             </div>
         </div>
     </fieldset>
+
+    <!-- Добавляем выбор группы -->
+    <fieldset class="fieldset">
+        <legend class="fieldset-legend">
+            Group
+        </legend>
+        <select class="select w-full" name="group" required>
+            <option value="">Select group</option>
+            <option value="ECP" {{ if eq .Form.Group "ECP" }}selected{{ end }}>ECP</option>
+            <option value="GAAS" {{ if eq .Form.Group "GAAS" }}selected{{ end }}>GAAS</option>
+            <option value="ETO" {{ if eq .Form.Group "ETO" }}selected{{ end }}>ETO</option>
+        </select>
+        {{ with .Form.Errors.Group }}
+        <div class="label text-red-500">{{ . }}</div>
+        {{ end }}
+    </fieldset>
+    <!-- конец блока -->
+
     <div class="card border border-base-200">
         <div class="card-body p-4">
             <div class="card-actions justify-start peer">
