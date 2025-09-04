@@ -1,6 +1,5 @@
 -- +goose Up
-ALTER TABLE monitors ADD COLUMN group_name TEXT;
+ALTER TABLE monitors ADD COLUMN group_name TEXT DEFAULT '';
 
 -- +goose Down
--- SQLite не поддерживает DROP COLUMN, так что down делаем no-op
--- (если нужно будет убрать колонку, придётся пересоздавать таблицу)
+ALTER TABLE monitors DROP COLUMN group_name;
