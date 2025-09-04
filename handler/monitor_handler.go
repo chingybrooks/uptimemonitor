@@ -252,6 +252,7 @@ func (h *Handler) EditMonitorPage() http.HandlerFunc {
 			WebhookMethod:    m.WebhookMethod,
 			WebhookHeaders:   m.WebhookHeaders,
 			WebhookBody:      m.WebhookBody,
+			Group:            m.Group, // ✅ добавили поддержку group в форму
 		}
 
 		if !f.HasCustomBody {
@@ -318,6 +319,7 @@ func (h *Handler) EditMonitorForm() http.HandlerFunc {
 			WebhookUrl:       r.PostFormValue("webhook_url"),
 			WebhookHeaders:   r.PostFormValue("webhook_headers"),
 			WebhookBody:      r.PostFormValue("webhook_body"),
+			Group:            r.PostFormValue("group"), // ✅ забираем из формы
 		}
 
 		if !f.Validate() {
@@ -332,6 +334,7 @@ func (h *Handler) EditMonitorForm() http.HandlerFunc {
 
 		monitor.Url = f.Url
 		monitor.HttpMethod = f.HttpMethod
+		monitor.Group = f.Group // ✅ сохраняем группу в монитор
 
 		if f.HasCustomHeaders {
 			monitor.HttpHeaders = f.HttpHeaders
