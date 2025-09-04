@@ -19,6 +19,7 @@ type MonitorForm struct {
 	WebhookUrl       string
 	WebhookBody      string
 	WebhookHeaders   string
+	Group            string
 
 	Errors map[string]string
 }
