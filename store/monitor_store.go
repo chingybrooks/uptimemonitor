@@ -24,17 +24,20 @@ func (s *Store) CreateMonitor(ctx context.Context, monitor uptimemonitor.Monitor
 			url, uuid, 
 			http_method, http_headers, http_body, 
 			webhook_url, webhook_method, webhook_headers, webhook_body, 
+			"group",
 			created_at
 		) 
-		VALUES(?,?,?,?,?,?,?,?,?,?)
+		VALUES(?,?,?,?,?,?,?,?,?,?,?)
 	`
 	monitor.CreatedAt = time.Now()
 
 	uuid := uuid.NewString()
 	res, err := s.db.ExecContext(
 		ctx, stmt,
-		monitor.Url, uuid, monitor.HttpMethod, monitor.HttpHeaders, monitor.HttpBody,
+		monitor.Url, uuid,
+		monitor.HttpMethod, monitor.HttpHeaders, monitor.HttpBody,
 		monitor.WebhookUrl, monitor.WebhookMethod, monitor.WebhookHeaders, monitor.WebhookBody,
+		monitor.Group,
 		monitor.CreatedAt,
 	)
 	if err != nil {
@@ -53,10 +56,11 @@ func (s *Store) ListMonitors(ctx context.Context) ([]uptimemonitor.Monitor, erro
 		SELECT 
 		id, url, uuid, created_at,
 		http_method, http_body, http_headers,
-		webhook_method, webhook_url, webhook_headers, webhook_body
+		webhook_method, webhook_url, webhook_headers, webhook_body,
+		"group"
 	 	FROM monitors 
 		ORDER BY created_at DESC
-	 `
+	`
 
 	rows, err := s.db.QueryContext(ctx, stmt)
 	if err != nil {
@@ -69,8 +73,10 @@ func (s *Store) ListMonitors(ctx context.Context) ([]uptimemonitor.Monitor, erro
 	for rows.Next() {
 		var m uptimemonitor.Monitor
 		if err := rows.Scan(
-			&m.ID, &m.Url, &m.Uuid, &m.CreatedAt, &m.HttpMethod, &m.HttpBody, &m.HttpHeaders,
+			&m.ID, &m.Url, &m.Uuid, &m.CreatedAt,
+			&m.HttpMethod, &m.HttpBody, &m.HttpHeaders,
 			&m.WebhookMethod, &m.WebhookUrl, &m.WebhookHeaders, &m.WebhookBody,
+			&m.Group,
 		); err != nil {
 			return monitors, err
 		}
@@ -91,6 +97,7 @@ func (s *Store) GetMonitorByID(ctx context.Context, id int) (uptimemonitor.Monit
 		id, url, uuid, http_method, http_headers, http_body, 
 		webhook_url, webhook_method, webhook_headers, webhook_body,
 		uptime, avg_response_time_ms, n, incidents_count,
+		"group",
 		created_at 
 		FROM monitors 
 		WHERE id = ?
@@ -102,6 +109,7 @@ func (s *Store) GetMonitorByID(ctx context.Context, id int) (uptimemonitor.Monit
 			&m.ID, &m.Url, &m.Uuid, &m.HttpMethod, &m.HttpHeaders, &m.HttpBody,
 			&m.WebhookUrl, &m.WebhookMethod, &m.WebhookHeaders, &m.WebhookBody,
 			&m.Uptime, &m.AvgResponseTimeMs, &m.N, &m.IncidentsCount,
+			&m.Group,
 			&m.CreatedAt,
 		)
 
@@ -114,6 +122,7 @@ func (s *Store) GetMonitorByUuid(ctx context.Context, uuid string) (uptimemonito
 		id, url, uuid, http_method, http_headers, http_body, 
 		webhook_url, webhook_method, webhook_headers, webhook_body,
 		uptime, avg_response_time_ms, n, incidents_count,
+		"group",
 		created_at 
 		FROM monitors 
 		WHERE uuid = ?
@@ -125,6 +134,7 @@ func (s *Store) GetMonitorByUuid(ctx context.Context, uuid string) (uptimemonito
 			&m.ID, &m.Url, &m.Uuid, &m.HttpMethod, &m.HttpHeaders, &m.HttpBody,
 			&m.WebhookUrl, &m.WebhookMethod, &m.WebhookHeaders, &m.WebhookBody,
 			&m.Uptime, &m.AvgResponseTimeMs, &m.N, &m.IncidentsCount,
+			&m.Group,
 			&m.CreatedAt,
 		)
 	return m, err
@@ -134,13 +144,16 @@ func (s *Store) UpdateMonitor(ctx context.Context, monitor uptimemonitor.Monitor
 	stmt := `
 		UPDATE monitors SET 
 		url = ?, http_method = ?, http_headers = ?, http_body = ?,
-		webhook_url = ?, webhook_method = ?, webhook_headers = ?, webhook_body = ?
+		webhook_url = ?, webhook_method = ?, webhook_headers = ?, webhook_body = ?,
+		"group" = ?
 		WHERE id = ?
 	`
 
 	_, err := s.db.ExecContext(
-		ctx, stmt, monitor.Url, monitor.HttpMethod, monitor.HttpHeaders, monitor.HttpBody,
+		ctx, stmt,
+		monitor.Url, monitor.HttpMethod, monitor.HttpHeaders, monitor.HttpBody,
 		monitor.WebhookUrl, monitor.WebhookMethod, monitor.WebhookHeaders, monitor.WebhookBody,
+		monitor.Group,
 		monitor.ID,
 	)
 	if err != nil {
