@@ -97,6 +97,7 @@ func (h *Handler) CreateMonitorForm() http.HandlerFunc {
 		monitor := uptimemonitor.Monitor{
 			HttpMethod: f.HttpMethod,
 			Url:        f.Url,
+			Group:      f.Group,
 		}
 
 		if f.HasCustomHeaders {
