@@ -18,14 +18,14 @@ type Monitor struct {
     WebhookMethod     string
     WebhookHeaders    string
     WebhookBody       string
+    Group             string
     Uptime            float32
     AvgResponseTimeMs int64
     N                 int64
     IncidentsCount    int64
     CreatedAt         time.Time
-
-    Group             string    // добавляем для группировки
 }
+
 
 
 func (m Monitor) URI() string {
