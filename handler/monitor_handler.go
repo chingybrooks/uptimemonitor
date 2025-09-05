@@ -12,25 +12,31 @@ import (
 )
 
 func (h *Handler) ListMonitors() http.HandlerFunc {
-	tmpl := template.Must(template.ParseFS(html.FS, "monitor.html"))
+    tmpl := template.Must(template.ParseFS(html.FS, "monitor.html"))
 
-	type data struct {
-		Monitors  []uptimemonitor.Monitor
-		Skeletons []int
-	}
+    type data struct {
+        Monitors  []uptimemonitor.Monitor
+        Skeletons []int
+    }
 
-	return func(w http.ResponseWriter, r *http.Request) {
-		monitors, err := h.Store.ListMonitors(r.Context())
-		if err != nil {
-			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
-			return
-		}
+    return func(w http.ResponseWriter, r *http.Request) {
+        monitors, err := h.Store.ListMonitors(r.Context())
+        if err != nil {
+            http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+            return
+        }
 
-		tmpl.ExecuteTemplate(w, "monitor_list", data{
-			Monitors:  monitors,
-			Skeletons: make([]int, 60),
-		})
-	}
+        for i := range monitors {
+            if monitors[i].Group == "" {
+                monitors[i].Group = "Ungrouped"
+            }
+        }
+
+        tmpl.ExecuteTemplate(w, "monitor_list", data{
+            Monitors:  monitors,
+            Skeletons: make([]int, 60),
+        })
+    }
 }
 
 func (h *Handler) CreateMonitorPage() http.HandlerFunc {
