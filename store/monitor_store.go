@@ -18,7 +18,11 @@ func (s *Store) CountMonitors(ctx context.Context) int {
 }
 
 func (s *Store) CreateMonitor(ctx context.Context, monitor uptimemonitor.Monitor) (uptimemonitor.Monitor, error) {
-	stmt := `
+    if monitor.Group == "" {
+        monitor.Group = "Ungrouped"
+    }
+
+    stmt := `
 		INSERT INTO 
 		monitors(
 			url, uuid, 
